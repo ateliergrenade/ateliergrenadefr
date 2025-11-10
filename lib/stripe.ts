@@ -18,10 +18,15 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
  */
 export async function createStripeProduct(atelier: Atelier) {
   try {
+    // Stripe description has a max length of 250 characters
+    const truncatedDescription = atelier.description_courte.length > 250
+      ? atelier.description_courte.substring(0, 247) + '...'
+      : atelier.description_courte
+
     // Create the product
     const product = await stripe.products.create({
       name: atelier.titre,
-      description: atelier.description_courte,
+      description: truncatedDescription,
       metadata: {
         atelier_id: atelier.id,
         slug: atelier.slug,
@@ -69,10 +74,15 @@ export async function updateStripeProduct(
   currentPriceId: string
 ) {
   try {
+    // Stripe description has a max length of 250 characters
+    const truncatedDescription = atelier.description_courte.length > 250
+      ? atelier.description_courte.substring(0, 247) + '...'
+      : atelier.description_courte
+
     // Update the product
     await stripe.products.update(currentProductId, {
       name: atelier.titre,
-      description: atelier.description_courte,
+      description: truncatedDescription,
       metadata: {
         atelier_id: atelier.id,
         slug: atelier.slug,
