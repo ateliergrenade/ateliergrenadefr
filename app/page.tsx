@@ -1,63 +1,159 @@
-import Image from "next/image";
+import { supabase } from "@/lib/supabase";
+import { AteliersList } from "@/components/AteliersList";
+import { ParallaxBanner } from "@/components/ParallaxBanner";
 
-export default function Home() {
+export default async function Home() {
+  // Fetch ateliers from Supabase
+  const { data: ateliers } = await supabase
+    .from("ateliers")
+    .select("*")
+    .order("created_at", { ascending: false });
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen" style={{ backgroundColor: "#f8f5f2" }}>
+      {/* Banner with Parallax Effect */}
+      <ParallaxBanner />
+
+      {/* Main Content */}
+      <main className="relative z-0" style={{ backgroundColor: "#f8f5f2" }}>
+        <div className="container mx-auto px-6 pt-4 md:pt-8 pb-16 md:pb-24">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Title */}
+            <h1
+              className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight"
+              style={{ 
+                color: "#2d5a3d",
+                fontFamily: "var(--font-playfair), serif",
+                fontWeight: 800,
+                letterSpacing: "-0.03em",
+                marginTop: "-1.5rem", // Remonte le titre en ajoutant un margin négatif
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Atelier Grenade
+            </h1>
+            {/* Subtitle */}
+            <p
+              className="text-2xl md:text-3xl mb-12 font-semibold italic"
+              style={{ 
+                color: "#3d7a52",
+                fontFamily: "var(--font-playfair), serif",
+                fontWeight: 600
+              }}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+              Maroquinerie Artisanale
+            </p>
+
+            {/* Decorative line */}
+            <div className="w-32 h-1 mx-auto mb-12" style={{ background: "#2d5a3d" }}></div>
+
+            {/* Welcome Message - 2 columns layout */}
+            <div className="max-w-5xl mx-auto mb-16">
+              <div className="grid md:grid-cols-2 gap-x-12 gap-y-6">
+                <div>
+                  <p
+                    className="text-base md:text-lg leading-relaxed text-left mb-6"
+                    style={{ 
+                      color: "#1f2937",
+                      fontFamily: "var(--font-crimson), serif",
+                      lineHeight: "1.7"
+                    }}
+                  >
+                    Atelier Grenade, c'est un atelier de maroquinerie coloré et créatif, où le cuir devient le terrain de jeu de toutes les envies. On y cultive l'amour des matières naturelles, des couleurs vives et du fait-main. Chaque création raconte une histoire, la vôtre.
+                  </p>
+                  
+                  <p
+                    className="text-base md:text-lg leading-relaxed text-left font-semibold mb-6"
+                    style={{ 
+                      color: "#2d5a3d",
+                      fontFamily: "var(--font-crimson), serif",
+                      lineHeight: "1.7"
+                    }}
+                  >
+                    Après plusieurs belles années passées dans l'Oise, Atelier Grenade arrive à Paris !
+                  </p>
+                  
+                  <p
+                    className="text-base md:text-lg leading-relaxed text-left"
+                    style={{ 
+                      color: "#1f2937",
+                      fontFamily: "var(--font-crimson), serif",
+                      lineHeight: "1.7"
+                    }}
+                  >
+                    Une nouvelle étape pour partager encore plus largement le plaisir de créer, apprendre et fabriquer soi-même des pièces uniques.
+                  </p>
+                </div>
+                
+                <div>
+                  <div className="mb-6">
+                    <h3
+                      className="text-xl md:text-2xl font-bold mb-3 text-left"
+                      style={{
+                        color: "#2d5a3d",
+                        fontFamily: "var(--font-playfair), serif",
+                      }}
+                    >
+                      Des ateliers accessibles à tous
+                    </h3>
+                    <p
+                      className="text-base md:text-lg leading-relaxed text-left"
+                      style={{ 
+                        color: "#1f2937",
+                        fontFamily: "var(--font-crimson), serif",
+                        lineHeight: "1.7"
+                      }}
+                    >
+                      Que vous soyez débutant curieux ou passionné, les ateliers sont pensés pour être simples, ludiques et accessibles. Ils se déroulent dans des lieux sympas et inspirants, propices à la créativité, ou directement à domicile pour un moment convivial et sur mesure.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3
+                      className="text-xl md:text-2xl font-bold mb-3 text-left"
+                      style={{
+                        color: "#2d5a3d",
+                        fontFamily: "var(--font-playfair), serif",
+                      }}
+                    >
+                      Venez créer, apprendre et vous amuser
+                    </h3>
+                    <p
+                      className="text-base md:text-lg leading-relaxed text-left"
+                      style={{ 
+                        color: "#1f2937",
+                        fontFamily: "var(--font-crimson), serif",
+                        lineHeight: "1.7"
+                      }}
+                    >
+                      Chez Atelier Grenade, chaque session est une parenthèse joyeuse : on découvre, on échange, on s'amuse, et on repart avec sa propre création, fièrement confectionnée à la main de la couture à la finition.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Ateliers Section */}
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2
+                className="text-5xl md:text-6xl font-bold mb-4"
+                style={{
+                  color: "#2d5a3d",
+                  fontFamily: "var(--font-playfair), serif",
+                  fontWeight: 700,
+                }}
+              >
+                Les Ateliers
+              </h2>
+              <div
+                className="w-24 h-1 mx-auto"
+                style={{ background: "#c8102e" }}
+              ></div>
+            </div>
+
+            <AteliersList ateliers={ateliers || []} />
+          </div>
         </div>
       </main>
     </div>
