@@ -7,7 +7,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 
 // Initialize Stripe client
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-10-29.clover',
+  // apiVersion is pinned by the stripe package version, no need to specify it explicitly
   typescript: true,
 })
 

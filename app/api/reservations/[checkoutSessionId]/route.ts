@@ -30,7 +30,8 @@ export async function GET(
             titre,
             prix,
             duree,
-            description
+            description_courte,
+            description_longue
           )
         ),
         client:clients (

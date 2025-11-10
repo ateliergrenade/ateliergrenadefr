@@ -104,8 +104,13 @@ export async function POST(request: NextRequest) {
         .delete()
         .eq('id', data.id)
 
+      const errorMessage = stripeError instanceof Error ? stripeError.message : 'Erreur inconnue'
+      
       return NextResponse.json(
-        { error: 'Erreur lors de la création du produit Stripe. Atelier non créé.' },
+        { 
+          error: 'Erreur lors de la création du produit Stripe. Atelier non créé.',
+          details: errorMessage
+        },
         { status: 500 }
       )
     }
