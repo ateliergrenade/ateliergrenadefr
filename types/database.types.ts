@@ -66,8 +66,6 @@ export type Database = {
           participants_max: number
           prix: number
           slug: string
-          stripe_price_id: string | null
-          stripe_product_id: string | null
           titre: string
           updated_at: string | null
         }
@@ -84,8 +82,6 @@ export type Database = {
           participants_max: number
           prix: number
           slug: string
-          stripe_price_id?: string | null
-          stripe_product_id?: string | null
           titre: string
           updated_at?: string | null
         }
@@ -102,8 +98,6 @@ export type Database = {
           participants_max?: number
           prix?: number
           slug?: string
-          stripe_price_id?: string | null
-          stripe_product_id?: string | null
           titre?: string
           updated_at?: string | null
         }

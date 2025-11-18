@@ -21,7 +21,7 @@ export default async function Home() {
             {/* Title */}
             <h1
               className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight"
-              style={{ 
+              style={{
                 color: "#2d5a3d",
                 fontFamily: "var(--font-playfair), serif",
                 fontWeight: 800,
@@ -34,7 +34,7 @@ export default async function Home() {
             {/* Subtitle */}
             <p
               className="text-2xl md:text-3xl mb-12 font-semibold italic"
-              style={{ 
+              style={{
                 color: "#3d7a52",
                 fontFamily: "var(--font-playfair), serif",
                 fontWeight: 600
@@ -52,7 +52,7 @@ export default async function Home() {
                 <div>
                   <p
                     className="text-base md:text-lg leading-relaxed text-left mb-6"
-                    style={{ 
+                    style={{
                       color: "#1f2937",
                       fontFamily: "var(--font-crimson), serif",
                       lineHeight: "1.7"
@@ -60,10 +60,10 @@ export default async function Home() {
                   >
                     Atelier Grenade, c'est un atelier de maroquinerie coloré et créatif, où le cuir devient le terrain de jeu de toutes les envies. On y cultive l'amour des matières naturelles, des couleurs vives et du fait-main. Chaque création raconte une histoire, la vôtre.
                   </p>
-                  
+
                   <p
                     className="text-base md:text-lg leading-relaxed text-left font-semibold mb-6"
-                    style={{ 
+                    style={{
                       color: "#2d5a3d",
                       fontFamily: "var(--font-crimson), serif",
                       lineHeight: "1.7"
@@ -71,10 +71,10 @@ export default async function Home() {
                   >
                     Après plusieurs belles années passées dans l'Oise, Atelier Grenade arrive à Paris !
                   </p>
-                  
+
                   <p
                     className="text-base md:text-lg leading-relaxed text-left"
-                    style={{ 
+                    style={{
                       color: "#1f2937",
                       fontFamily: "var(--font-crimson), serif",
                       lineHeight: "1.7"
@@ -83,7 +83,7 @@ export default async function Home() {
                     Une nouvelle étape pour partager encore plus largement le plaisir de créer, apprendre et fabriquer soi-même des pièces uniques.
                   </p>
                 </div>
-                
+
                 <div>
                   <div className="mb-6">
                     <h3
@@ -97,7 +97,7 @@ export default async function Home() {
                     </h3>
                     <p
                       className="text-base md:text-lg leading-relaxed text-left"
-                      style={{ 
+                      style={{
                         color: "#1f2937",
                         fontFamily: "var(--font-crimson), serif",
                         lineHeight: "1.7"
@@ -106,7 +106,7 @@ export default async function Home() {
                       Que vous soyez débutant curieux ou passionné, les ateliers sont pensés pour être simples, ludiques et accessibles. Ils se déroulent dans des lieux sympas et inspirants, propices à la créativité, ou directement à domicile pour un moment convivial et sur mesure.
                     </p>
                   </div>
-                  
+
                   <div>
                     <h3
                       className="text-xl md:text-2xl font-bold mb-3 text-left"
@@ -119,7 +119,7 @@ export default async function Home() {
                     </h3>
                     <p
                       className="text-base md:text-lg leading-relaxed text-left"
-                      style={{ 
+                      style={{
                         color: "#1f2937",
                         fontFamily: "var(--font-crimson), serif",
                         lineHeight: "1.7"
@@ -133,27 +133,28 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Ateliers Section */}
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2
-                className="text-5xl md:text-6xl font-bold mb-4"
-                style={{
-                  color: "#2d5a3d",
-                  fontFamily: "var(--font-playfair), serif",
-                  fontWeight: 700,
-                }}
-              >
-                Les Ateliers
-              </h2>
-              <div
-                className="w-24 h-1 mx-auto"
-                style={{ background: "#c8102e" }}
-              ></div>
-            </div>
-
-            <AteliersList ateliers={ateliers || []} />
+          {/* Ateliers Section - Title centered */}
+          <div className="max-w-5xl mx-auto text-center mb-0">
+            <h2
+              className="text-5xl md:text-6xl font-bold mb-2"
+              style={{
+                color: "#2d5a3d",
+                fontFamily: "var(--font-playfair), serif",
+                fontWeight: 700,
+              }}
+            >
+              Les Ateliers
+            </h2>
+            <div
+              className="w-24 h-1 mx-auto"
+              style={{ background: "#c8102e" }}
+            ></div>
           </div>
+        </div>
+
+        {/* Full-width carousel - Outside container */}
+        <div className="w-full -mt-12">
+          <AteliersList ateliers={ateliers || []} />
         </div>
       </main>
     </div>

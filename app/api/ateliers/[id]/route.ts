@@ -3,7 +3,6 @@ import { supabase } from '@/lib/supabase'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { atelierUpdateSchema } from '@/lib/validations'
 import { isAuthenticated } from '@/lib/auth'
-import { updateStripeProduct, archiveStripeProduct } from '@/lib/stripe'
 
 type Params = {
   params: Promise<{
@@ -30,28 +29,6 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     const validatedData = atelierUpdateSchema.parse(body)
 
     const adminClient = createAdminClient()
-
-    // First, get the existing atelier to check if it has Stripe IDs
-    const { data: existingAtelier, error: fetchError } = await adminClient
-      .from('ateliers')
-      .select('*')
-      .eq('id', id)
-      .single()
-
-    if (fetchError || !existingAtelier) {
-      console.error('Error fetching existing atelier:', {
-        id,
-        error: fetchError,
-        code: fetchError?.code,
-        message: fetchError?.message,
-        details: fetchError?.details,
-        hint: fetchError?.hint
-      })
-      return NextResponse.json(
-        { error: 'Atelier non trouvé', details: fetchError?.message },
-        { status: 404 }
-      )
-    }
 
     // Update in Supabase
     const { data, error } = await adminClient
@@ -83,40 +60,6 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         { error: 'Atelier non trouvé' },
         { status: 404 }
       )
-    }
-
-    // Update Stripe product if Stripe IDs exist
-    if (existingAtelier.stripe_product_id && existingAtelier.stripe_price_id) {
-      try {
-        const { productId, priceId } = await updateStripeProduct(
-          data,
-          existingAtelier.stripe_product_id,
-          existingAtelier.stripe_price_id
-        )
-
-        // Update atelier with new Stripe IDs if price changed
-        if (priceId !== existingAtelier.stripe_price_id) {
-          const { data: updatedData, error: updateError } = await adminClient
-            .from('ateliers')
-            .update({ 
-              stripe_product_id: productId,
-              stripe_price_id: priceId 
-            })
-            .eq('id', id)
-            .select()
-            .single()
-
-          if (updateError) {
-            console.error('Error updating atelier with new Stripe price ID:', updateError)
-          }
-
-          return NextResponse.json(updatedData || data)
-        }
-      } catch (stripeError) {
-        console.error('Stripe error during update:', stripeError)
-        // Don't fail the request if Stripe update fails
-        // The atelier was already updated successfully in Supabase
-      }
     }
 
     return NextResponse.json(data)
@@ -152,31 +95,6 @@ export async function DELETE(request: NextRequest, { params }: Params) {
     const { id } = await params
 
     const adminClient = createAdminClient()
-
-    // First, get the atelier to retrieve Stripe product ID
-    const { data: atelier, error: fetchError } = await adminClient
-      .from('ateliers')
-      .select('*')
-      .eq('id', id)
-      .single()
-
-    if (fetchError || !atelier) {
-      return NextResponse.json(
-        { error: 'Atelier non trouvé' },
-        { status: 404 }
-      )
-    }
-
-    // Archive Stripe product if it exists
-    if (atelier.stripe_product_id) {
-      try {
-        await archiveStripeProduct(atelier.stripe_product_id)
-      } catch (stripeError) {
-        console.error('Stripe error during deletion:', stripeError)
-        // Don't fail the request if Stripe archiving fails
-        // We still want to delete the atelier from Supabase
-      }
-    }
 
     // Delete from Supabase
     const { error } = await adminClient

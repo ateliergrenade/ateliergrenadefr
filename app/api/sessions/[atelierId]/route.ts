@@ -30,8 +30,7 @@ export async function GET(
           id,
           titre,
           prix,
-          duree,
-          stripe_price_id
+          duree
         )
       `)
       .eq('atelier_id', atelierId)
@@ -56,5 +55,6 @@ export async function GET(
     )
   }
 }
+
 
 
