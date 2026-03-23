@@ -10,7 +10,7 @@ import {
   reservationSchema,
   type ReservationFormData,
 } from "@/lib/validations-reservation";
-import { Calendar, Clock, AlertCircle, ArrowLeft, Minus, Plus, Users } from "lucide-react";
+import { Calendar, Clock, AlertCircle, ArrowLeft, Minus, Plus, Users, MapPin } from "lucide-react";
 
 interface ReservationFormProps {
   selectedSession: SessionAtelierWithAtelier;
@@ -119,6 +119,20 @@ export function ReservationForm({
               })}
             </p>
           </div>
+
+          {/* Address */}
+          {selectedSession.adresse && (
+            <div className="flex items-center gap-3">
+              <MapPin
+                size={20}
+                className="flex-shrink-0"
+                style={{ color: "#2d5a3d" }}
+              />
+              <p className="text-base text-gray-700">
+                {selectedSession.adresse}
+              </p>
+            </div>
+          )}
 
           {/* Available places */}
           <div className="flex items-center gap-3 pt-2">

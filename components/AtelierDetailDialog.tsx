@@ -21,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -555,6 +556,12 @@ export function AtelierDetailDialog({
                                     >
                                       {timeStr}
                                     </p>
+                                    {session.adresse && (
+                                      <p className="text-xs text-gray-600 flex items-center gap-1">
+                                        <MapPin size={12} className="flex-shrink-0" />
+                                        {session.adresse}
+                                      </p>
+                                    )}
                                     {session.places_disponibles > 0 ? (
                                       <p className="text-xs text-gray-600">
                                         {session.places_disponibles} place

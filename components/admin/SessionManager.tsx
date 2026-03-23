@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Plus, Edit, Trash2, Calendar } from 'lucide-react'
+import { Plus, Edit, Trash2, Calendar, MapPin } from 'lucide-react'
 import { adminFetch } from '@/lib/admin-fetch'
 
 interface SessionManagerProps {
@@ -37,7 +37,10 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
     duree: 120,
     places_totales: 10,
     places_prises: 0,
+    adresse: '',
   })
+  const [existingAddresses, setExistingAddresses] = useState<string[]>([])
+  const [showAddressSuggestions, setShowAddressSuggestions] = useState(false)
 
   // Fetch sessions for this atelier
   const fetchSessions = async () => {
@@ -59,9 +62,22 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
     }
   }
 
+  const fetchAddresses = async () => {
+    try {
+      const response = await adminFetch('/api/admin/addresses')
+      if (response.ok) {
+        const data = await response.json()
+        setExistingAddresses(data)
+      }
+    } catch (err) {
+      console.error('Error fetching addresses:', err)
+    }
+  }
+
   useEffect(() => {
     if (open) {
       fetchSessions()
+      fetchAddresses()
     }
   }, [open, atelier.id])
 
@@ -97,12 +113,15 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
 
       const places_disponibles = Math.max(0, formData.places_totales - formData.places_prises)
 
+      const adresse = formData.adresse.trim() || null
+
       const payload = selectedSession
         ? {
             date_debut: dateDebutISO,
             date_fin: dateFinISO,
             places_disponibles,
             places_totales: formData.places_totales,
+            adresse,
           }
         : {
             atelier_id: atelier.id,
@@ -110,6 +129,7 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
             date_fin: dateFinISO,
             places_disponibles,
             places_totales: formData.places_totales,
+            adresse,
           }
 
       const response = await adminFetch(url, {
@@ -188,6 +208,7 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
       duree: dureeMinutes,
       places_totales: placesTotales,
       places_prises: placesTotales - session.places_disponibles,
+      adresse: session.adresse || '',
     })
     setFormOpen(true)
     setError('')
@@ -200,8 +221,13 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
       duree: 120,
       places_totales: 10,
       places_prises: 0,
+      adresse: '',
     })
   }
+
+  const filteredAddresses = existingAddresses.filter(
+    (addr) => addr.toLowerCase().includes(formData.adresse.toLowerCase()) && addr !== formData.adresse
+  )
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -286,6 +312,12 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                                 <span className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full" style={{ color: '#c8102e', background: 'rgba(200, 16, 46, 0.08)' }}>Complet</span>
                               )}
                             </p>
+                            {session.adresse && (
+                              <p className="flex items-center gap-1" style={{ color: '#6b7280' }}>
+                                <MapPin size={12} className="flex-shrink-0" />
+                                {session.adresse}
+                              </p>
+                            )}
                             {isPast && (
                               <p className="text-xs italic" style={{ color: '#9ca3af' }}>Session passée</p>
                             )}
@@ -429,6 +461,56 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                   {formData.places_prises >= formData.places_totales && (
                     <span className="ml-1 font-semibold" style={{ color: '#c8102e' }}>— Session complète</span>
                   )}
+                </p>
+              </div>
+
+              <div className="space-y-2 relative">
+                <Label htmlFor="adresse" className="text-sm font-semibold" style={{ color: '#2c2c2c' }}>
+                  Adresse
+                </Label>
+                <Input
+                  id="adresse"
+                  type="text"
+                  value={formData.adresse}
+                  onChange={(e) => {
+                    setFormData({ ...formData, adresse: e.target.value })
+                    setShowAddressSuggestions(true)
+                  }}
+                  onFocus={() => setShowAddressSuggestions(true)}
+                  onBlur={() => {
+                    // Delay to allow click on suggestion
+                    setTimeout(() => setShowAddressSuggestions(false), 200)
+                  }}
+                  placeholder="Ex : 12 rue des Ateliers, 75011 Paris"
+                  className="input-focus border-2 h-12 transition-all hover:border-[#2d5a3d]/30"
+                  style={inputStyle}
+                  autoComplete="off"
+                />
+                {showAddressSuggestions && filteredAddresses.length > 0 && (
+                  <div
+                    className="absolute z-50 w-full mt-1 rounded-lg border-2 shadow-lg overflow-hidden"
+                    style={{ background: 'white', borderColor: '#e8e4df', top: '100%' }}
+                  >
+                    {filteredAddresses.map((addr) => (
+                      <button
+                        key={addr}
+                        type="button"
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-[#2d5a3d]/5 transition-colors flex items-center gap-2"
+                        style={{ color: '#2c2c2c' }}
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          setFormData({ ...formData, adresse: addr })
+                          setShowAddressSuggestions(false)
+                        }}
+                      >
+                        <MapPin size={14} className="flex-shrink-0" style={{ color: '#2d5a3d' }} />
+                        {addr}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <p className="text-xs p-2 rounded-lg" style={{ color: '#6b7280', background: 'rgba(45, 90, 61, 0.04)' }}>
+                  Optionnel — les adresses déjà utilisées sont suggérées
                 </p>
               </div>
 

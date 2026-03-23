@@ -189,6 +189,7 @@ export type Database = {
       }
       sessions_ateliers: {
         Row: {
+          adresse: string | null
           atelier_id: string
           created_at: string | null
           date_debut: string
@@ -199,6 +200,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          adresse?: string | null
           atelier_id: string
           created_at?: string | null
           date_debut: string
@@ -209,6 +211,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          adresse?: string | null
           atelier_id?: string
           created_at?: string | null
           date_debut?: string
