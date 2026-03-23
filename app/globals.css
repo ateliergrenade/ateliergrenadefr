@@ -295,6 +295,28 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 420px;
 }
 
+/* Embla Carousel - Slide Transitions */
+.embla__slide {
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+  opacity: 0.4;
+  transform: scale(0.92);
+}
+
+.embla__slide.embla__slide--active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 10;
+}
+
+/* For smoother transitions on hover */
+.embla__slide:hover {
+  opacity: 0.7;
+}
+
+.embla__slide--active:hover {
+  opacity: 1;
+}
+
 /* Navigation Arrows */
 .carousel-button {
   position: absolute;

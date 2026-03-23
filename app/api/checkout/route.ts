@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
         atelier:ateliers (
           id,
           titre,
-          prix,
-          stripe_price_id
+          description_courte,
+          prix
         )
       `)
       .eq('id', sessionId)
@@ -52,12 +52,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 4. Check if atelier has Stripe price configured
+    // 4. Get atelier data
     const atelierData = Array.isArray(session.atelier) ? session.atelier[0] : session.atelier
-    if (!atelierData?.stripe_price_id) {
-      console.error('No Stripe price configured for atelier:', atelierData?.id)
+    if (!atelierData) {
+      console.error('No atelier data found for session:', sessionId)
       return NextResponse.json(
-        { error: 'Configuration de paiement manquante pour cet atelier' },
+        { error: 'Données de l\'atelier manquantes' },
         { status: 500 }
       )
     }
@@ -133,10 +133,26 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'
 
     try {
+      // Create description with session date
+      const sessionDate = new Date(session.date_debut).toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      const productDescription = `${atelierData.titre} - Session du ${sessionDate}`
+
       const checkoutSession = await stripe.checkout.sessions.create({
         line_items: [
           {
-            price: atelierData.stripe_price_id,
+            price_data: {
+              currency: 'eur',
+              unit_amount: Math.round(atelierData.prix * 100), // Convert to cents
+              product_data: {
+                name: atelierData.titre,
+                description: productDescription,
+              },
+            },
             quantity: 1,
           },
         ],
@@ -193,5 +209,6 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
 
 

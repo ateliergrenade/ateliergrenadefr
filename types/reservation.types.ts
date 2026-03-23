@@ -20,7 +20,6 @@ export type SessionAtelierWithAtelier = SessionAtelier & {
     titre: string
     prix: number
     duree: string
-    stripe_price_id: string | null
   }
 }
 
@@ -48,5 +47,6 @@ export type CheckoutResponse = {
 }
 
 export type SessionsResponse = SessionAtelierWithAtelier[]
+
 
 

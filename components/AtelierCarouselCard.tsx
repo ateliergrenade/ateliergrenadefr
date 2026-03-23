@@ -9,12 +9,14 @@ interface AtelierCarouselCardProps {
   atelier: Atelier;
   onDetailsClick: (atelier: Atelier) => void;
   variant: number;
+  isActive?: boolean;
 }
 
 export function AtelierCarouselCard({
   atelier,
   onDetailsClick,
-  variant
+  variant,
+  isActive = false
 }: AtelierCarouselCardProps) {
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
 
