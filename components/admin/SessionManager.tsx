@@ -26,8 +26,9 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
   const [error, setError] = useState('')
 
   const [formData, setFormData] = useState({
-    date_debut: '',
-    date_fin: '',
+    date: '',
+    heure_debut: '',
+    duree: 120,
     places_disponibles: 10,
   })
 
@@ -70,31 +71,22 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
 
       const method = selectedSession ? 'PATCH' : 'POST'
 
-      // Convert datetime-local format to ISO 8601 format
-      // datetime-local returns YYYY-MM-DDTHH:mm format (local time)
-      // We need to convert it to ISO 8601 format with timezone
-      if (!formData.date_debut || !formData.date_fin) {
+      if (!formData.date || !formData.heure_debut || !formData.duree) {
         setError('Veuillez remplir tous les champs')
         setActionLoading(false)
         return
       }
 
-      const dateDebutISO = new Date(formData.date_debut).toISOString()
-      const dateFinISO = new Date(formData.date_fin).toISOString()
-
-      // Validate that dates are valid
-      if (isNaN(new Date(formData.date_debut).getTime()) || isNaN(new Date(formData.date_fin).getTime())) {
-        setError('Les dates saisies sont invalides')
+      const dateDebut = new Date(`${formData.date}T${formData.heure_debut}`)
+      if (isNaN(dateDebut.getTime())) {
+        setError('La date ou l\'heure saisie est invalide')
         setActionLoading(false)
         return
       }
 
-      // Validate that end date is after start date
-      if (new Date(formData.date_fin) <= new Date(formData.date_debut)) {
-        setError('La date de fin doit être après la date de début')
-        setActionLoading(false)
-        return
-      }
+      const dateFin = new Date(dateDebut.getTime() + formData.duree * 60 * 1000)
+      const dateDebutISO = dateDebut.toISOString()
+      const dateFinISO = dateFin.toISOString()
 
       const payload = selectedSession
         ? {
@@ -175,9 +167,13 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
   // Open edit dialog
   const handleEdit = (session: SessionAtelierWithAtelier) => {
     setSelectedSession(session)
+    const debut = new Date(session.date_debut)
+    const fin = new Date(session.date_fin)
+    const dureeMinutes = Math.round((fin.getTime() - debut.getTime()) / (60 * 1000))
     setFormData({
-      date_debut: new Date(session.date_debut).toISOString().slice(0, 16),
-      date_fin: new Date(session.date_fin).toISOString().slice(0, 16),
+      date: debut.toISOString().slice(0, 10),
+      heure_debut: debut.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }),
+      duree: dureeMinutes,
       places_disponibles: session.places_disponibles,
     })
     setFormOpen(true)
@@ -186,8 +182,9 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
 
   const resetForm = () => {
     setFormData({
-      date_debut: '',
-      date_fin: '',
+      date: '',
+      heure_debut: '',
+      duree: 120,
       places_disponibles: 10,
     })
   }
@@ -323,31 +320,53 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="date_debut" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <span className="text-purple-500">📅</span> Date et heure de début *
+                <Label htmlFor="date" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span className="text-purple-500">📅</span> Date *
                 </Label>
                 <Input
-                  id="date_debut"
-                  type="datetime-local"
-                  value={formData.date_debut}
-                  onChange={(e) => setFormData({ ...formData, date_debut: e.target.value })}
+                  id="date"
+                  type="date"
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                   className="input-focus border-2 hover:border-purple-200 transition-all bg-white text-black"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="date_fin" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <span className="text-indigo-500">🕐</span> Date et heure de fin *
+                <Label htmlFor="heure_debut" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span className="text-indigo-500">🕐</span> Heure de début *
                 </Label>
                 <Input
-                  id="date_fin"
-                  type="datetime-local"
-                  value={formData.date_fin}
-                  onChange={(e) => setFormData({ ...formData, date_fin: e.target.value })}
+                  id="heure_debut"
+                  type="time"
+                  value={formData.heure_debut}
+                  onChange={(e) => setFormData({ ...formData, heure_debut: e.target.value })}
                   className="input-focus border-2 hover:border-indigo-200 transition-all bg-white text-black"
                   required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="duree" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span className="text-emerald-500">⏱️</span> Durée (en minutes) *
+                </Label>
+                <Input
+                  id="duree"
+                  type="number"
+                  min="15"
+                  step="15"
+                  value={formData.duree}
+                  onChange={(e) =>
+                    setFormData({ ...formData, duree: parseInt(e.target.value) || 0 })
+                  }
+                  className="input-focus border-2 hover:border-emerald-200 transition-all bg-white text-black"
+                  required
+                />
+                <p className="text-xs text-gray-500 flex items-center gap-1 bg-gray-50 p-2 rounded-lg">
+                  <span>💡</span>
+                  Ex : 120 = 2h, 90 = 1h30
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -365,10 +384,6 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                   className="input-focus border-2 hover:border-cyan-200 transition-all bg-white text-black"
                   required
                 />
-                <p className="text-xs text-gray-500 flex items-center gap-1 bg-gray-50 p-2 rounded-lg">
-                  <span>💡</span>
-                  Nombre de places disponibles pour cette session
-                </p>
               </div>
 
               <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
