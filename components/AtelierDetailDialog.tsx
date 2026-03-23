@@ -555,47 +555,55 @@ export function AtelierDetailDialog({
                                     >
                                       {timeStr}
                                     </p>
-                                    <p className="text-xs text-gray-600">
-                                      {session.places_disponibles} place
-                                      {session.places_disponibles > 1
-                                        ? "s"
-                                        : ""}{" "}
-                                      disponible
-                                      {session.places_disponibles > 1
-                                        ? "s"
-                                        : ""}
-                                    </p>
+                                    {session.places_disponibles > 0 ? (
+                                      <p className="text-xs text-gray-600">
+                                        {session.places_disponibles} place
+                                        {session.places_disponibles > 1
+                                          ? "s"
+                                          : ""}{" "}
+                                        disponible
+                                        {session.places_disponibles > 1
+                                          ? "s"
+                                          : ""}
+                                      </p>
+                                    ) : (
+                                      <p className="text-xs font-semibold" style={{ color: "#c8102e" }}>
+                                        Complet
+                                      </p>
+                                    )}
                                   </div>
-                                  <Button
-                                    onClick={() =>
-                                      handleReserveSession(session)
-                                    }
-                                    disabled={
-                                      session.places_disponibles === 0
-                                    }
-                                    className="px-4 py-1.5 text-sm font-semibold rounded-full transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    style={{
-                                      backgroundColor:
-                                        session.places_disponibles > 0
-                                          ? "#2d5a3d"
-                                          : "#9ca3af",
-                                      color: "#ffffff",
-                                    }}
-                                    onMouseEnter={(e) => {
-                                      if (session.places_disponibles > 0) {
+                                  {session.places_disponibles > 0 ? (
+                                    <Button
+                                      onClick={() =>
+                                        handleReserveSession(session)
+                                      }
+                                      className="px-4 py-1.5 text-sm font-semibold rounded-full transition-all hover:scale-105"
+                                      style={{
+                                        backgroundColor: "#2d5a3d",
+                                        color: "#ffffff",
+                                      }}
+                                      onMouseEnter={(e) => {
                                         e.currentTarget.style.backgroundColor =
                                           "#3d7a52";
-                                      }
-                                    }}
-                                    onMouseLeave={(e) => {
-                                      if (session.places_disponibles > 0) {
+                                      }}
+                                      onMouseLeave={(e) => {
                                         e.currentTarget.style.backgroundColor =
                                           "#2d5a3d";
-                                      }
-                                    }}
-                                  >
-                                    Réserver
-                                  </Button>
+                                      }}
+                                    >
+                                      Réserver
+                                    </Button>
+                                  ) : (
+                                    <span
+                                      className="px-4 py-1.5 text-sm font-semibold rounded-full"
+                                      style={{
+                                        backgroundColor: "#e5e7eb",
+                                        color: "#6b7280",
+                                      }}
+                                    >
+                                      Complet
+                                    </span>
+                                  )}
                                 </div>
                               );
                             })}

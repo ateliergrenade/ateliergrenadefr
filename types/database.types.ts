@@ -189,6 +189,7 @@ export type Database = {
           date_fin: string
           id: string
           places_disponibles: number
+          places_totales: number
           updated_at: string | null
         }
         Insert: {
@@ -198,6 +199,7 @@ export type Database = {
           date_fin: string
           id?: string
           places_disponibles: number
+          places_totales: number
           updated_at?: string | null
         }
         Update: {
@@ -207,6 +209,7 @@ export type Database = {
           date_fin?: string
           id?: string
           places_disponibles?: number
+          places_totales?: number
           updated_at?: string | null
         }
         Relationships: [

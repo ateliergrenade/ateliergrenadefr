@@ -19,9 +19,9 @@ export async function GET(
     }
 
     // Fetch sessions with atelier details
-    // Only return future sessions with available places
+    // Return future sessions (including full ones to show as "complet")
     const now = new Date().toISOString()
-    
+
     const { data: sessions, error } = await supabase
       .from('sessions_ateliers')
       .select(`
@@ -35,7 +35,6 @@ export async function GET(
       `)
       .eq('atelier_id', atelierId)
       .gte('date_debut', now)
-      .gt('places_disponibles', 0)
       .order('date_debut', { ascending: true })
 
     if (error) {

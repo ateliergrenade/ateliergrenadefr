@@ -29,7 +29,8 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
     date: '',
     heure_debut: '',
     duree: 120,
-    places_disponibles: 10,
+    places_totales: 10,
+    places_prises: 0,
   })
 
   // Fetch sessions for this atelier
@@ -88,17 +89,21 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
       const dateDebutISO = dateDebut.toISOString()
       const dateFinISO = dateFin.toISOString()
 
+      const places_disponibles = Math.max(0, formData.places_totales - formData.places_prises)
+
       const payload = selectedSession
         ? {
             date_debut: dateDebutISO,
             date_fin: dateFinISO,
-            places_disponibles: formData.places_disponibles,
+            places_disponibles,
+            places_totales: formData.places_totales,
           }
         : {
             atelier_id: atelier.id,
             date_debut: dateDebutISO,
             date_fin: dateFinISO,
-            places_disponibles: formData.places_disponibles,
+            places_disponibles,
+            places_totales: formData.places_totales,
           }
 
       const response = await adminFetch(url, {
@@ -170,11 +175,13 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
     const debut = new Date(session.date_debut)
     const fin = new Date(session.date_fin)
     const dureeMinutes = Math.round((fin.getTime() - debut.getTime()) / (60 * 1000))
+    const placesTotales = session.places_totales || session.places_disponibles
     setFormData({
       date: debut.toISOString().slice(0, 10),
       heure_debut: debut.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }),
       duree: dureeMinutes,
-      places_disponibles: session.places_disponibles,
+      places_totales: placesTotales,
+      places_prises: placesTotales - session.places_disponibles,
     })
     setFormOpen(true)
     setError('')
@@ -185,7 +192,8 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
       date: '',
       heure_debut: '',
       duree: 120,
-      places_disponibles: 10,
+      places_totales: 10,
+      places_prises: 0,
     })
   }
 
@@ -265,7 +273,10 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                               {dateFin.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                             </p>
                             <p className="text-gray-600">
-                              👥 {session.places_disponibles} place(s) disponible(s)
+                              👥 {(session.places_totales || session.places_disponibles) - session.places_disponibles}/{session.places_totales || session.places_disponibles} place(s) prise(s)
+                              {session.places_disponibles === 0 && (
+                                <span className="ml-2 text-xs font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">Complet</span>
+                              )}
                             </p>
                             {isPast && (
                               <p className="text-xs text-gray-500 italic">Session passée</p>
@@ -370,20 +381,49 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="places_disponibles" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <span className="text-cyan-500">👥</span> Places disponibles *
+                <Label htmlFor="places_totales" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span className="text-cyan-500">👥</span> Places totales *
                 </Label>
                 <Input
-                  id="places_disponibles"
+                  id="places_totales"
                   type="number"
-                  min="0"
-                  value={formData.places_disponibles}
-                  onChange={(e) =>
-                    setFormData({ ...formData, places_disponibles: parseInt(e.target.value) || 0 })
-                  }
+                  min="1"
+                  value={formData.places_totales}
+                  onChange={(e) => {
+                    const newTotal = parseInt(e.target.value) || 0
+                    setFormData({
+                      ...formData,
+                      places_totales: newTotal,
+                      places_prises: Math.min(formData.places_prises, newTotal),
+                    })
+                  }}
                   className="input-focus border-2 hover:border-cyan-200 transition-all bg-white text-black"
                   required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="places_prises" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <span className="text-orange-500">🎟️</span> Places prises
+                </Label>
+                <Input
+                  id="places_prises"
+                  type="number"
+                  min="0"
+                  max={formData.places_totales}
+                  value={formData.places_prises}
+                  onChange={(e) =>
+                    setFormData({ ...formData, places_prises: Math.min(parseInt(e.target.value) || 0, formData.places_totales) })
+                  }
+                  className="input-focus border-2 hover:border-orange-200 transition-all bg-white text-black"
+                />
+                <p className="text-xs text-gray-500 flex items-center gap-1 bg-gray-50 p-2 rounded-lg">
+                  <span>💡</span>
+                  {formData.places_totales - formData.places_prises} place(s) restante(s)
+                  {formData.places_prises >= formData.places_totales && (
+                    <span className="ml-1 text-red-600 font-semibold">— Session complète</span>
+                  )}
+                </p>
               </div>
 
               <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">

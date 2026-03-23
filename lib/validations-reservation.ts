@@ -22,7 +22,8 @@ export const sessionAtelierSchema = z.object({
   atelier_id: z.string().uuid('ID d\'atelier invalide'),
   date_debut: z.string().datetime('Date de début invalide'),
   date_fin: z.string().datetime('Date de fin invalide'),
-  places_disponibles: z.number().int().positive('Le nombre de places doit être positif'),
+  places_disponibles: z.number().int().min(0, 'Le nombre de places disponibles ne peut pas être négatif'),
+  places_totales: z.number().int().positive('Le nombre de places totales doit être positif'),
 })
 
 export type ClientFormData = z.infer<typeof clientSchema>
