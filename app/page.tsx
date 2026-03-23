@@ -172,6 +172,32 @@ export default async function Home() {
             </div>
           </div>
         </div>
+
+        {/* Contact */}
+        <footer
+          className="mt-16 py-12 px-6 text-center"
+          style={{ backgroundColor: "#2d5a3d" }}
+        >
+          <h2
+            className="text-3xl md:text-4xl font-bold mb-6"
+            style={{
+              color: "#ffffff",
+              fontFamily: "var(--font-playfair), serif",
+            }}
+          >
+            Contact
+          </h2>
+          <a
+            href="mailto:contact.ateliergrenade@gmail.com"
+            className="text-lg md:text-xl hover:underline"
+            style={{
+              color: "#f8f5f2",
+              fontFamily: "var(--font-crimson), serif",
+            }}
+          >
+            ✉ contact.ateliergrenade@gmail.com
+          </a>
+        </footer>
       </main>
     </div>
   );
