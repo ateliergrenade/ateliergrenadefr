@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Atelier } from "@/types/atelier.types";
-import { AtelierCarousel } from "./AtelierCarousel";
+import { AtelierStackedHero } from "./layouts/AtelierStackedHero";
 import { AtelierDetailDialog } from "./AtelierDetailDialog";
 
 interface AteliersListProps {
@@ -44,7 +44,7 @@ export function AteliersList({ ateliers }: AteliersListProps) {
 
   return (
     <>
-      <AtelierCarousel
+      <AtelierStackedHero
         ateliers={ateliers}
         onDetailsClick={handleDetailsClick}
       />
