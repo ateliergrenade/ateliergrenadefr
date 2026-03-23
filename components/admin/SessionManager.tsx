@@ -101,7 +101,7 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
             places_disponibles: formData.places_disponibles,
           }
 
-      const response = await fetch(url, {
+      const response = await adminFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
