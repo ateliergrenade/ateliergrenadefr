@@ -7,7 +7,7 @@ export default async function Home() {
   const { data: ateliers } = await supabase
     .from("ateliers")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("ordre", { ascending: true });
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#f8f5f2" }}>

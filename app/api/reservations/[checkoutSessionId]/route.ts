@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function GET(
   request: NextRequest,
@@ -7,6 +7,8 @@ export async function GET(
 ) {
   try {
     const { checkoutSessionId } = await params
+
+    const supabase = createAdminClient()
 
     if (!checkoutSessionId) {
       return NextResponse.json(
@@ -65,6 +67,7 @@ export async function GET(
         stripe_checkout_session_id: reservation.stripe_checkout_session_id,
         stripe_payment_intent_id: reservation.stripe_payment_intent_id,
         montant_paye: reservation.montant_paye,
+        nombre_personnes: reservation.nombre_personnes,
         created_at: reservation.created_at,
       },
       session: reservation.session

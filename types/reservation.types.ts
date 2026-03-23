@@ -38,6 +38,7 @@ export type ClientFormData = {
 
 export type ReservationFormData = ClientFormData & {
   sessionId: string
+  nombre_personnes: number
 }
 
 // Types pour les réponses API

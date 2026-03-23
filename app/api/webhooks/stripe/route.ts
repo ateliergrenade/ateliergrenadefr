@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
-import { supabase } from '@/lib/supabase'
+import { createAdminClient } from '@/lib/supabase/admin'
 import Stripe from 'stripe'
 
 // This is needed to get the raw body for signature verification
@@ -41,6 +41,8 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  const supabase = createAdminClient()
+
   // Handle the event
   try {
     switch (event.type) {
@@ -50,7 +52,8 @@ export async function POST(request: NextRequest) {
         console.log('Checkout session completed:', session.id)
 
         // Get metadata from the checkout session
-        const { reservation_id, session_id } = session.metadata || {}
+        const { reservation_id, session_id, nombre_personnes: nombre_personnes_str } = session.metadata || {}
+        const nombre_personnes = parseInt(nombre_personnes_str || '1', 10)
 
         if (!reservation_id || !session_id) {
           console.error('Missing metadata in checkout session:', session.id)
@@ -102,7 +105,7 @@ export async function POST(request: NextRequest) {
           // Don't return error, reservation is already confirmed
           // Log the error and continue
         } else {
-          const newPlacesDisponibles = Math.max(0, sessionData.places_disponibles - 1)
+          const newPlacesDisponibles = Math.max(0, sessionData.places_disponibles - nombre_personnes)
 
           const { error: sessionUpdateError } = await supabase
             .from('sessions_ateliers')

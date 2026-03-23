@@ -10,16 +10,31 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Pencil, Trash2, Calendar } from 'lucide-react'
+import { Pencil, Trash2, Calendar, ArrowUp, ArrowDown } from 'lucide-react'
 
 interface AtelierTableProps {
   ateliers: Atelier[]
   onEdit: (atelier: Atelier) => void
   onDelete: (atelier: Atelier) => void
   onManageSessions?: (atelier: Atelier) => void
+  onReorder?: (orderedIds: string[]) => void
 }
 
-export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: AtelierTableProps) {
+export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions, onReorder }: AtelierTableProps) {
+  const handleMoveUp = (index: number) => {
+    if (index === 0 || !onReorder) return
+    const ids = ateliers.map(a => a.id)
+    ;[ids[index - 1], ids[index]] = [ids[index], ids[index - 1]]
+    onReorder(ids)
+  }
+
+  const handleMoveDown = (index: number) => {
+    if (index === ateliers.length - 1 || !onReorder) return
+    const ids = ateliers.map(a => a.id)
+    ;[ids[index], ids[index + 1]] = [ids[index + 1], ids[index]]
+    onReorder(ids)
+  }
+
   if (ateliers.length === 0) {
     return (
       <div className="text-center py-16">
@@ -39,6 +54,7 @@ export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: A
       <Table>
         <TableHeader>
           <TableRow style={{ background: '#fafaf8' }}>
+            <TableHead className="font-bold w-[80px]" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Ordre</TableHead>
             <TableHead className="font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Titre</TableHead>
             <TableHead className="font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Slug</TableHead>
             <TableHead className="font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Prix</TableHead>
@@ -47,12 +63,36 @@ export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: A
           </TableRow>
         </TableHeader>
         <TableBody>
-          {ateliers.map((atelier) => (
+          {ateliers.map((atelier, index) => (
             <TableRow
               key={atelier.id}
               className="table-row-hover"
               style={{ borderBottom: '1px solid #e8e4df' }}
             >
+              <TableCell>
+                <div className="flex flex-col gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleMoveUp(index)}
+                    disabled={index === 0}
+                    className="h-6 w-6 p-0"
+                    title="Monter"
+                  >
+                    <ArrowUp className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleMoveDown(index)}
+                    disabled={index === ateliers.length - 1}
+                    className="h-6 w-6 p-0"
+                    title="Descendre"
+                  >
+                    <ArrowDown className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </TableCell>
               <TableCell className="font-semibold" style={{ color: '#2c2c2c' }}>
                 {atelier.titre}
               </TableCell>

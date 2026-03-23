@@ -11,6 +11,7 @@ interface ReservationData {
     id: string;
     statut: string;
     montant_paye: number | null;
+    nombre_personnes: number;
     created_at: string | null;
   };
   session: {
@@ -362,6 +363,13 @@ function ReservationSuccessContent() {
                       </div>
                     )}
                   </>
+                )}
+
+                {data.reservation.nombre_personnes > 1 && (
+                  <div>
+                    <span className="font-semibold">Participants :</span>{" "}
+                    {data.reservation.nombre_personnes} personnes
+                  </div>
                 )}
 
                 {data.reservation.montant_paye && (

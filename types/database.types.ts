@@ -62,6 +62,7 @@ export type Database = {
           id: string
           materiel_fourni: boolean
           niveau_requis: string | null
+          ordre: number
           parent_requis: boolean
           participants_max: number
           prix: number
@@ -78,6 +79,7 @@ export type Database = {
           id?: string
           materiel_fourni: boolean
           niveau_requis?: string | null
+          ordre?: number
           parent_requis: boolean
           participants_max: number
           prix: number
@@ -94,6 +96,7 @@ export type Database = {
           id?: string
           materiel_fourni?: boolean
           niveau_requis?: string | null
+          ordre?: number
           parent_requis?: boolean
           participants_max?: number
           prix?: number
@@ -136,6 +139,7 @@ export type Database = {
           created_at: string | null
           id: string
           montant_paye: number | null
+          nombre_personnes: number
           session_id: string
           statut: string
           stripe_checkout_session_id: string | null
@@ -147,6 +151,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           montant_paye?: number | null
+          nombre_personnes?: number
           session_id: string
           statut?: string
           stripe_checkout_session_id?: string | null
@@ -158,6 +163,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           montant_paye?: number | null
+          nombre_personnes?: number
           session_id?: string
           statut?: string
           stripe_checkout_session_id?: string | null

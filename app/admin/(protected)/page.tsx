@@ -128,6 +128,30 @@ export default function AdminPage() {
     router.refresh()
   }
 
+  // Handle reorder
+  const handleReorder = async (orderedIds: string[]) => {
+    // Optimistic update
+    const reordered = orderedIds.map(id => ateliers.find(a => a.id === id)!).filter(Boolean)
+    setAteliers(reordered)
+
+    try {
+      const response = await adminFetch('/api/ateliers/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderedIds }),
+      })
+
+      if (!response.ok) {
+        // Revert on error
+        await fetchAteliers()
+        setError('Erreur lors de la mise à jour de l\'ordre')
+      }
+    } catch {
+      await fetchAteliers()
+      setError('Erreur lors de la mise à jour de l\'ordre')
+    }
+  }
+
   // Open create dialog
   const handleCreate = () => {
     setSelectedAtelier(null)
@@ -245,6 +269,7 @@ export default function AdminPage() {
                 onEdit={handleEdit}
                 onDelete={handleDeleteClick}
                 onManageSessions={handleManageSessions}
+                onReorder={handleReorder}
               />
             )}
           </CardContent>

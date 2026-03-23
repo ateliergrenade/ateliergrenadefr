@@ -263,6 +263,11 @@ export default function ReservationsAdminPage() {
                                 )}
                               </div>
                             </div>
+                            {reservation.nombre_personnes > 1 && (
+                              <p className="font-semibold" style={{ color: '#2c2c2c' }}>
+                                {reservation.nombre_personnes} personnes
+                              </p>
+                            )}
                             {reservation.montant_paye && (
                               <p className="font-semibold" style={{ color: '#2d5a3d' }}>
                                 Montant payé : {reservation.montant_paye} €

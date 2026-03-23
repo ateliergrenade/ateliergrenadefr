@@ -10,7 +10,7 @@ import {
   reservationSchema,
   type ReservationFormData,
 } from "@/lib/validations-reservation";
-import { Calendar, Clock, AlertCircle, ArrowLeft } from "lucide-react";
+import { Calendar, Clock, AlertCircle, ArrowLeft, Minus, Plus, Users } from "lucide-react";
 
 interface ReservationFormProps {
   selectedSession: SessionAtelierWithAtelier;
@@ -30,13 +30,20 @@ export function ReservationForm({
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ReservationFormData>({
     resolver: zodResolver(reservationSchema),
     defaultValues: {
       sessionId: selectedSession.id,
+      nombre_personnes: 1,
     },
   });
+
+  const nombrePersonnes = watch("nombre_personnes");
+  const prixUnitaire = selectedSession.atelier?.prix ?? 0;
+  const prixTotal = prixUnitaire * nombrePersonnes;
 
   const dateDebut = new Date(selectedSession.date_debut);
   const dateFin = new Date(selectedSession.date_fin);
@@ -132,8 +139,77 @@ export function ReservationForm({
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Hidden session ID field */}
+        {/* Hidden fields */}
         <input type="hidden" {...register("sessionId")} />
+        <input type="hidden" {...register("nombre_personnes", { valueAsNumber: true })} />
+
+        {/* Nombre de personnes */}
+        <div
+          className="bg-white rounded-lg p-5 shadow-sm"
+          style={{ border: "2px solid #e8e4df" }}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Users size={20} style={{ color: "#2d5a3d" }} />
+              <span className="text-base font-semibold" style={{ color: "#2d5a3d" }}>
+                Nombre de participants
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                disabled={nombrePersonnes <= 1}
+                onClick={() => setValue("nombre_personnes", nombrePersonnes - 1)}
+                className="w-9 h-9 flex items-center justify-center rounded-full border-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                style={{
+                  borderColor: "#2d5a3d",
+                  color: "#2d5a3d",
+                }}
+              >
+                <Minus size={16} />
+              </button>
+              <span
+                className="text-xl font-bold w-8 text-center"
+                style={{ color: "#1f2937" }}
+              >
+                {nombrePersonnes}
+              </span>
+              <button
+                type="button"
+                disabled={nombrePersonnes >= selectedSession.places_disponibles}
+                onClick={() => setValue("nombre_personnes", nombrePersonnes + 1)}
+                className="w-9 h-9 flex items-center justify-center rounded-full border-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                style={{
+                  borderColor: "#2d5a3d",
+                  color: "#2d5a3d",
+                }}
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Prix dynamique */}
+          <div
+            className="mt-3 pt-3 text-center"
+            style={{ borderTop: "1px solid #e8e4df" }}
+          >
+            {nombrePersonnes > 1 ? (
+              <p className="text-base" style={{ color: "#1f2937" }}>
+                {nombrePersonnes} x{" "}
+                {new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(prixUnitaire)}
+                {" = "}
+                <span className="text-lg font-bold" style={{ color: "#2d5a3d" }}>
+                  {new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(prixTotal)}
+                </span>
+              </p>
+            ) : (
+              <p className="text-lg font-bold" style={{ color: "#2d5a3d" }}>
+                {new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(prixUnitaire)}
+              </p>
+            )}
+          </div>
+        </div>
 
         {/* Nom */}
         <div>

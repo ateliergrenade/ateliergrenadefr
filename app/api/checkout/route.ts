@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { stripe } from '@/lib/stripe'
 import { reservationSchema } from '@/lib/validations-reservation'
 
@@ -9,7 +9,9 @@ export async function POST(request: NextRequest) {
 
     // Validate request data
     const validatedData = reservationSchema.parse(body)
-    const { sessionId, nom, prenom, email, telephone } = validatedData
+    const { sessionId, nom, prenom, email, telephone, nombre_personnes } = validatedData
+
+    const supabase = createAdminClient()
 
     // 1. Fetch session details with atelier info
     const { data: session, error: sessionError } = await supabase
@@ -34,10 +36,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 2. Check if session has available places
-    if (session.places_disponibles <= 0) {
+    // 2. Check if session has enough available places
+    if (session.places_disponibles < nombre_personnes) {
       return NextResponse.json(
-        { error: 'Plus de places disponibles pour cette session' },
+        { error: session.places_disponibles === 0
+            ? 'Plus de places disponibles pour cette session'
+            : `Seulement ${session.places_disponibles} place${session.places_disponibles > 1 ? 's' : ''} disponible${session.places_disponibles > 1 ? 's' : ''}` },
         { status: 400 }
       )
     }
@@ -116,7 +120,8 @@ export async function POST(request: NextRequest) {
         session_id: sessionId,
         client_id: clientId,
         statut: 'en_attente',
-        montant_paye: atelierData.prix,
+        montant_paye: atelierData.prix * nombre_personnes,
+        nombre_personnes,
       })
       .select()
       .single()
@@ -153,7 +158,7 @@ export async function POST(request: NextRequest) {
                 description: productDescription,
               },
             },
-            quantity: 1,
+            quantity: nombre_personnes,
           },
         ],
         mode: 'payment',
@@ -165,6 +170,7 @@ export async function POST(request: NextRequest) {
           session_id: sessionId,
           client_id: clientId,
           atelier_id: atelierData.id,
+          nombre_personnes: nombre_personnes.toString(),
         },
       })
 
@@ -180,7 +186,7 @@ export async function POST(request: NextRequest) {
         reservationId: reservation.id,
       })
     } catch (stripeError) {
-      console.error('Stripe error:', stripeError)
+      console.error('Stripe error:', stripeError instanceof Error ? { message: stripeError.message, type: (stripeError as any).type, code: (stripeError as any).code } : stripeError)
 
       // Rollback: delete the reservation
       await supabase

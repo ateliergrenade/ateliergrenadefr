@@ -10,7 +10,7 @@ export async function GET() {
     const { data: ateliers, error } = await supabase
       .from('ateliers')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('ordre', { ascending: true })
 
     if (error) {
       console.error('Supabase error:', error)
@@ -47,11 +47,21 @@ export async function POST(request: NextRequest) {
     // Validate data
     const validatedData = atelierSchema.parse(body)
 
-    // Insert into Supabase
+    // Determine next ordre value
     const adminClient = createAdminClient()
+    const { data: lastAtelier } = await adminClient
+      .from('ateliers')
+      .select('ordre')
+      .order('ordre', { ascending: false })
+      .limit(1)
+      .single()
+
+    const nextOrdre = (lastAtelier?.ordre ?? -1) + 1
+
+    // Insert into Supabase
     const { data, error } = await adminClient
       .from('ateliers')
-      .insert(validatedData)
+      .insert({ ...validatedData, ordre: nextOrdre })
       .select()
       .single()
 

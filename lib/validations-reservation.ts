@@ -15,6 +15,7 @@ export const reservationSchema = z.object({
   prenom: z.string().min(2, 'Le prénom doit contenir au moins 2 caractères'),
   email: z.string().email('Email invalide'),
   telephone: z.string().regex(/^(\+33|0)[1-9](\d{2}){4}$/, 'Numéro de téléphone français invalide'),
+  nombre_personnes: z.number().int().min(1, 'Au moins 1 personne').max(10, 'Maximum 10 personnes'),
 })
 
 // Validation pour la création de session d'atelier
