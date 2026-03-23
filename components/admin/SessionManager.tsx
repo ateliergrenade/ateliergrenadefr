@@ -358,7 +358,7 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
 
         {/* Create/Edit Session Dialog */}
         <Dialog open={formOpen} onOpenChange={setFormOpen}>
-          <DialogContent className="max-w-md border-2" style={{ background: '#f8f5f2', borderColor: '#e8e4df' }}>
+          <DialogContent className="max-w-md border-2 max-h-[85vh] overflow-y-auto" style={{ background: '#f8f5f2', borderColor: '#e8e4df' }}>
             <DialogHeader>
               <DialogTitle className="text-2xl font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>
                 {selectedSession ? 'Modifier la session' : 'Nouvelle session'}
