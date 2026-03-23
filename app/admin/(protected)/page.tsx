@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Plus, LogOut } from 'lucide-react'
 import { adminFetch } from '@/lib/admin-fetch'
+import Link from 'next/link'
 
 export default function AdminPage() {
   const [ateliers, setAteliers] = useState<Atelier[]>([])
@@ -32,7 +33,7 @@ export default function AdminPage() {
     try {
       setLoading(true)
       const response = await fetch('/api/ateliers')
-      
+
       if (!response.ok) {
         throw new Error('Erreur lors du chargement des ateliers')
       }
@@ -60,7 +61,7 @@ export default function AdminPage() {
       const url = selectedAtelier
         ? `/api/ateliers/${selectedAtelier.id}`
         : '/api/ateliers'
-      
+
       const method = selectedAtelier ? 'PATCH' : 'POST'
 
       const response = await adminFetch(url, {
@@ -156,52 +157,65 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 text-gray-900 p-4 md:p-8">
+    <div className="min-h-screen p-4 md:p-8" style={{ background: '#f8f5f2', color: '#1f2937' }}>
       <div className="max-w-7xl mx-auto">
-        {/* Enhanced Header */}
+        {/* Header */}
         <div className="admin-header mb-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                ✨ Administration des Ateliers
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-playfair), serif' }}>
+                Administration
               </h1>
-              <p className="text-white/90 text-sm md:text-base">
-                Gérez et organisez les ateliers de l'Atelier Grenade
+              <p className="text-white/80 text-sm md:text-base" style={{ fontFamily: 'var(--font-crimson), serif' }}>
+                Gérez les ateliers de l'Atelier Grenade
               </p>
             </div>
-            <Button 
-              variant="outline" 
-              onClick={handleLogout}
-              className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50 backdrop-blur-sm transition-all"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Se déconnecter
-            </Button>
+            <div className="flex gap-2">
+              <Link href="/admin/sessions">
+                <Button
+                  variant="outline"
+                  className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50 transition-all"
+                >
+                  Sessions
+                </Button>
+              </Link>
+              <Link href="/admin/reservations">
+                <Button
+                  variant="outline"
+                  className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50 transition-all"
+                >
+                  Réservations
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50 transition-all"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Déconnexion
+              </Button>
+            </div>
           </div>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 text-orange-700 rounded-xl shadow-lg animate-slideDown">
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-8 h-8 bg-orange-200 rounded-full flex items-center justify-center">
-                <span className="text-orange-700 font-bold">!</span>
-              </div>
-              <p className="font-medium">{error}</p>
-            </div>
+          <div className="mb-6 p-4 rounded-lg border-2" style={{ background: 'rgba(200, 16, 46, 0.04)', borderColor: 'rgba(200, 16, 46, 0.2)', color: '#c8102e' }}>
+            <p className="font-medium">{error}</p>
           </div>
         )}
 
         {/* Main Card */}
         <Card className="admin-card border-0 overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 pb-6">
+          <CardHeader className="border-b pb-6" style={{ borderColor: '#e8e4df', background: 'white' }}>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="flex-1">
-                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                  Liste des ateliers
+                <CardTitle className="text-2xl font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>
+                  Ateliers
                 </CardTitle>
-                <CardDescription className="text-base mt-2 flex items-center gap-2">
-                  <span className="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-full text-purple-700 font-bold text-sm">
+                <CardDescription className="text-base mt-2 flex items-center gap-2" style={{ fontFamily: 'var(--font-crimson), serif' }}>
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full text-white text-sm font-bold" style={{ background: '#2d5a3d' }}>
                     {ateliers.length}
                   </span>
                   <span>
@@ -209,9 +223,9 @@ export default function AdminPage() {
                   </span>
                 </CardDescription>
               </div>
-              <Button 
+              <Button
                 onClick={handleCreate}
-                className="btn-gradient shadow-lg hover:shadow-xl"
+                className="btn-gradient"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Nouvel atelier
@@ -238,10 +252,10 @@ export default function AdminPage() {
 
         {/* Create/Edit Dialog */}
         <Dialog open={formOpen} onOpenChange={setFormOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto border-2" style={{ background: '#f8f5f2', borderColor: '#e8e4df' }}>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                {selectedAtelier ? '✏️ Modifier l\'atelier' : '✨ Nouvel atelier'}
+              <DialogTitle className="text-2xl font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>
+                {selectedAtelier ? 'Modifier l\'atelier' : 'Nouvel atelier'}
               </DialogTitle>
             </DialogHeader>
             <AtelierForm
@@ -279,4 +293,3 @@ export default function AdminPage() {
     </div>
   )
 }
-

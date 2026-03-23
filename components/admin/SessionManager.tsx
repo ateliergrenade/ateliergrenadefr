@@ -8,13 +8,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Plus, Edit, Trash2, Calendar, X } from 'lucide-react'
+import { Plus, Edit, Trash2, Calendar } from 'lucide-react'
 import { adminFetch } from '@/lib/admin-fetch'
 
 interface SessionManagerProps {
   atelier: Atelier
   open: boolean
   onOpenChange: (open: boolean) => void
+}
+
+const inputStyle = {
+  borderColor: '#d1d5db',
+  background: 'white',
+  color: '#1f2937',
 }
 
 export function SessionManager({ atelier, open, onOpenChange }: SessionManagerProps) {
@@ -199,31 +205,33 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-2" style={{ background: '#f8f5f2', borderColor: '#e8e4df' }}>
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-            📅 Sessions - {atelier.titre}
+          <DialogTitle className="text-2xl font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>
+            Sessions — {atelier.titre}
           </DialogTitle>
         </DialogHeader>
 
         {/* Error Message */}
         {error && (
-          <div className="p-4 bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 text-orange-700 rounded-xl">
+          <div className="p-4 rounded-lg border-2" style={{ background: 'rgba(200, 16, 46, 0.04)', borderColor: 'rgba(200, 16, 46, 0.2)', color: '#c8102e' }}>
             <p className="font-medium">{error}</p>
           </div>
         )}
 
         {/* Sessions List */}
-        <Card className="border-0 shadow-none">
-          <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 pb-4">
+        <Card className="border-0 shadow-none" style={{ background: 'transparent' }}>
+          <CardHeader className="border-b pb-4" style={{ borderColor: '#e8e4df' }}>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <CardTitle className="text-xl font-bold">Sessions planifiées</CardTitle>
-                <CardDescription className="text-sm mt-1">
+                <CardTitle className="text-xl font-bold" style={{ color: '#2c2c2c', fontFamily: 'var(--font-playfair), serif' }}>
+                  Sessions planifiées
+                </CardTitle>
+                <CardDescription className="text-sm mt-1" style={{ fontFamily: 'var(--font-crimson), serif' }}>
                   {sessions.length} session{sessions.length > 1 ? 's' : ''} au total
                 </CardDescription>
               </div>
-              <Button onClick={handleCreate} className="btn-gradient shadow-lg" size="sm">
+              <Button onClick={handleCreate} className="btn-gradient" size="sm">
                 <Plus className="h-4 w-4 mr-2" />
                 Nouvelle session
               </Button>
@@ -237,9 +245,9 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
               </div>
             ) : sessions.length === 0 ? (
               <div className="text-center py-12">
-                <Calendar size={48} className="mx-auto mb-4 text-gray-400" />
-                <p className="text-lg text-gray-600 mb-2">Aucune session planifiée</p>
-                <p className="text-gray-400 text-sm">Créez votre première session pour cet atelier</p>
+                <Calendar size={48} className="mx-auto mb-4" style={{ color: '#2d5a3d', opacity: 0.3 }} />
+                <p className="text-lg mb-2" style={{ color: '#2c2c2c', fontFamily: 'var(--font-playfair), serif' }}>Aucune session planifiée</p>
+                <p className="text-sm" style={{ color: '#6b7280' }}>Créez votre première session pour cet atelier</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -251,35 +259,35 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                   return (
                     <div
                       key={session.id}
-                      className={`p-4 rounded-lg border-2 ${
-                        isPast
-                          ? 'bg-gray-50 border-gray-200 opacity-75'
-                          : 'bg-white border-purple-200'
-                      }`}
+                      className={`p-4 rounded-lg border-2 transition-all ${isPast ? 'opacity-60' : ''}`}
+                      style={{
+                        background: isPast ? '#fafaf8' : 'white',
+                        borderColor: isPast ? '#e8e4df' : 'rgba(45, 90, 61, 0.2)',
+                      }}
                     >
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex-1">
-                          <div className="space-y-1 text-sm">
-                            <p className="font-semibold text-gray-900">
-                              📅 {dateDebut.toLocaleDateString('fr-FR', {
+                          <div className="space-y-1 text-sm" style={{ fontFamily: 'var(--font-crimson), serif' }}>
+                            <p className="font-semibold" style={{ color: '#2c2c2c' }}>
+                              {dateDebut.toLocaleDateString('fr-FR', {
                                 weekday: 'long',
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
                               })}
                             </p>
-                            <p className="text-gray-600">
-                              🕐 {dateDebut.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} -{' '}
+                            <p style={{ color: '#6b7280' }}>
+                              {dateDebut.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} –{' '}
                               {dateFin.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                             </p>
-                            <p className="text-gray-600">
-                              👥 {(session.places_totales || session.places_disponibles) - session.places_disponibles}/{session.places_totales || session.places_disponibles} place(s) prise(s)
+                            <p style={{ color: '#6b7280' }}>
+                              {(session.places_totales || session.places_disponibles) - session.places_disponibles}/{session.places_totales || session.places_disponibles} place(s) prise(s)
                               {session.places_disponibles === 0 && (
-                                <span className="ml-2 text-xs font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">Complet</span>
+                                <span className="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full" style={{ color: '#c8102e', background: 'rgba(200, 16, 46, 0.08)' }}>Complet</span>
                               )}
                             </p>
                             {isPast && (
-                              <p className="text-xs text-gray-500 italic">Session passée</p>
+                              <p className="text-xs italic" style={{ color: '#9ca3af' }}>Session passée</p>
                             )}
                           </div>
                         </div>
@@ -289,6 +297,8 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                             size="sm"
                             onClick={() => handleEdit(session)}
                             disabled={actionLoading}
+                            className="border-2 hover:bg-[#2d5a3d] hover:text-white hover:border-[#2d5a3d] transition-all"
+                            style={{ borderColor: '#d1d5db' }}
                           >
                             <Edit className="h-4 w-4 mr-1" />
                             Modifier
@@ -298,7 +308,8 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                             size="sm"
                             onClick={() => handleDelete(session)}
                             disabled={actionLoading}
-                            className="text-red-600 hover:bg-red-50"
+                            className="border-2 hover:bg-[#c8102e] hover:text-white hover:border-[#c8102e] transition-all"
+                            style={{ borderColor: '#d1d5db', color: '#c8102e' }}
                           >
                             <Trash2 className="h-4 w-4 mr-1" />
                             Supprimer
@@ -315,52 +326,46 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
 
         {/* Create/Edit Session Dialog */}
         <Dialog open={formOpen} onOpenChange={setFormOpen}>
-          <DialogContent className="max-w-md bg-white border-0 shadow-2xl">
+          <DialogContent className="max-w-md border-2" style={{ background: '#f8f5f2', borderColor: '#e8e4df' }}>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent flex items-center gap-2">
-                {selectedSession ? (
-                  <>
-                    <span>✏️</span> Modifier la session
-                  </>
-                ) : (
-                  <>
-                    <span>✨</span> Nouvelle session
-                  </>
-                )}
+              <DialogTitle className="text-2xl font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>
+                {selectedSession ? 'Modifier la session' : 'Nouvelle session'}
               </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="date" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <span className="text-purple-500">📅</span> Date *
+                <Label htmlFor="date" className="text-sm font-semibold" style={{ color: '#2c2c2c' }}>
+                  Date
                 </Label>
                 <Input
                   id="date"
                   type="date"
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="input-focus border-2 hover:border-purple-200 transition-all bg-white text-black"
+                  className="input-focus border-2 h-12 transition-all hover:border-[#2d5a3d]/30"
+                  style={inputStyle}
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="heure_debut" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <span className="text-indigo-500">🕐</span> Heure de début *
+                <Label htmlFor="heure_debut" className="text-sm font-semibold" style={{ color: '#2c2c2c' }}>
+                  Heure de début
                 </Label>
                 <Input
                   id="heure_debut"
                   type="time"
                   value={formData.heure_debut}
                   onChange={(e) => setFormData({ ...formData, heure_debut: e.target.value })}
-                  className="input-focus border-2 hover:border-indigo-200 transition-all bg-white text-black"
+                  className="input-focus border-2 h-12 transition-all hover:border-[#2d5a3d]/30"
+                  style={inputStyle}
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="duree" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <span className="text-emerald-500">⏱️</span> Durée (en minutes) *
+                <Label htmlFor="duree" className="text-sm font-semibold" style={{ color: '#2c2c2c' }}>
+                  Durée (en minutes)
                 </Label>
                 <Input
                   id="duree"
@@ -371,18 +376,18 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                   onChange={(e) =>
                     setFormData({ ...formData, duree: parseInt(e.target.value) || 0 })
                   }
-                  className="input-focus border-2 hover:border-emerald-200 transition-all bg-white text-black"
+                  className="input-focus border-2 h-12 transition-all hover:border-[#2d5a3d]/30"
+                  style={inputStyle}
                   required
                 />
-                <p className="text-xs text-gray-500 flex items-center gap-1 bg-gray-50 p-2 rounded-lg">
-                  <span>💡</span>
+                <p className="text-xs p-2 rounded-lg" style={{ color: '#6b7280', background: 'rgba(45, 90, 61, 0.04)' }}>
                   Ex : 120 = 2h, 90 = 1h30
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="places_totales" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <span className="text-cyan-500">👥</span> Places totales *
+                <Label htmlFor="places_totales" className="text-sm font-semibold" style={{ color: '#2c2c2c' }}>
+                  Places totales
                 </Label>
                 <Input
                   id="places_totales"
@@ -397,14 +402,15 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                       places_prises: Math.min(formData.places_prises, newTotal),
                     })
                   }}
-                  className="input-focus border-2 hover:border-cyan-200 transition-all bg-white text-black"
+                  className="input-focus border-2 h-12 transition-all hover:border-[#2d5a3d]/30"
+                  style={inputStyle}
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="places_prises" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <span className="text-orange-500">🎟️</span> Places prises
+                <Label htmlFor="places_prises" className="text-sm font-semibold" style={{ color: '#2c2c2c' }}>
+                  Places prises
                 </Label>
                 <Input
                   id="places_prises"
@@ -415,45 +421,34 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
                   onChange={(e) =>
                     setFormData({ ...formData, places_prises: Math.min(parseInt(e.target.value) || 0, formData.places_totales) })
                   }
-                  className="input-focus border-2 hover:border-orange-200 transition-all bg-white text-black"
+                  className="input-focus border-2 h-12 transition-all hover:border-[#2d5a3d]/30"
+                  style={inputStyle}
                 />
-                <p className="text-xs text-gray-500 flex items-center gap-1 bg-gray-50 p-2 rounded-lg">
-                  <span>💡</span>
+                <p className="text-xs p-2 rounded-lg" style={{ color: '#6b7280', background: 'rgba(45, 90, 61, 0.04)' }}>
                   {formData.places_totales - formData.places_prises} place(s) restante(s)
                   {formData.places_prises >= formData.places_totales && (
-                    <span className="ml-1 text-red-600 font-semibold">— Session complète</span>
+                    <span className="ml-1 font-semibold" style={{ color: '#c8102e' }}>— Session complète</span>
                   )}
                 </p>
               </div>
 
-              <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
-                <Button 
-                  type="button" 
-                  variant="outline" 
+              <div className="flex gap-3 justify-end pt-4" style={{ borderTop: '1px solid #e8e4df' }}>
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => setFormOpen(false)}
                   disabled={actionLoading}
-                  className="transition-all hover:bg-gray-100"
+                  className="border-2 transition-all"
+                  style={{ borderColor: '#d1d5db' }}
                 >
                   Annuler
                 </Button>
-                <Button 
-                  type="submit" 
-                  className="btn-gradient shadow-lg hover:shadow-xl transition-all hover:scale-105" 
+                <Button
+                  type="submit"
+                  className="btn-gradient"
                   disabled={actionLoading}
                 >
-                  {actionLoading ? (
-                    <span className="flex items-center gap-2">
-                      <span className="animate-spin">⏳</span> Enregistrement...
-                    </span>
-                  ) : selectedSession ? (
-                    <span className="flex items-center gap-2">
-                      <span>✏️</span> Mettre à jour
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <span>✨</span> Créer
-                    </span>
-                  )}
+                  {actionLoading ? 'Enregistrement...' : selectedSession ? 'Mettre à jour' : 'Créer'}
                 </Button>
               </div>
             </form>
@@ -463,4 +458,3 @@ export function SessionManager({ atelier, open, onOpenChange }: SessionManagerPr
     </Dialog>
   )
 }
-

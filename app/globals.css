@@ -59,7 +59,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Admin pages override */
 .admin-page {
-  background: white !important;
+  background: #f8f5f2 !important;
   color: #1f2937 !important;
 }
 
@@ -94,24 +94,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .admin-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2d5a3d;
   border-radius: 1rem;
   padding: 2rem;
-  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 10px 40px rgba(45, 90, 61, 0.15);
   animation: slideDown 0.5s ease-out;
 }
 
 .admin-card {
   background: white;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
   animation: fadeIn 0.6s ease-out;
 }
 
 .admin-card:hover {
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
 .table-row-hover {
@@ -119,97 +118,65 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .table-row-hover:hover {
-  background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-  transform: scale(1.01);
+  background: rgba(45, 90, 61, 0.04);
 }
 
 .action-button {
   transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
 }
 
-.action-button::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: translate(-50%, -50%);
-  transition: width 0.4s, height 0.4s;
-}
-
-.action-button:hover::before {
-  width: 200px;
-  height: 200px;
+.action-button:hover {
+  transform: scale(1.05);
 }
 
 .loading-shimmer {
   background: linear-gradient(
     90deg,
-    #f0f0f0 25%,
-    #e0e0e0 50%,
-    #f0f0f0 75%
+    #f0ede9 25%,
+    #e8e4df 50%,
+    #f0ede9 75%
   );
   background-size: 1000px 100%;
   animation: shimmer 2s infinite;
 }
 
 .badge-slug {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: rgba(45, 90, 61, 0.1);
+  color: #2d5a3d;
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
   font-family: 'Courier New', monospace;
   font-size: 0.75rem;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
   transition: all 0.2s ease;
 }
 
 .badge-slug:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: rgba(45, 90, 61, 0.15);
 }
 
 .price-tag {
-  background: linear-gradient(135deg, #3d7a52 0%, #2d5a3d 100%);
+  background: #2d5a3d;
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(45, 90, 61, 0.3);
   display: inline-block;
   transition: all 0.2s ease;
 }
 
 .price-tag:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(45, 90, 61, 0.4);
+  background: #3d7a52;
 }
 
 .stat-card {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  position: relative;
+  background: white;
+  border: 2px solid #e8e4df;
+  transition: all 0.2s ease;
 }
 
-.stat-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 2px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+.stat-card:hover {
+  border-color: #2d5a3d;
 }
 
 .input-focus {
@@ -217,38 +184,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .input-focus:focus {
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(45, 90, 61, 0.1);
+  border-color: #2d5a3d;
 }
 
 .btn-gradient {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2d5a3d;
   border: none;
   color: white;
   font-weight: 600;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-gradient::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.btn-gradient:hover::before {
-  left: 100%;
 }
 
 .btn-gradient:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  background: #3d7a52;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(45, 90, 61, 0.3);
 }
 
 .delete-btn {
@@ -256,8 +207,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .delete-btn:hover {
-  border-color: transparent !important;
-  transform: scale(1.05);
+  background: #c8102e !important;
+  border-color: #c8102e !important;
+  color: white !important;
 }
 
 .delete-btn:hover svg {
@@ -269,8 +221,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .edit-btn:hover {
-  border-color: transparent !important;
-  transform: scale(1.05);
+  background: #2d5a3d !important;
+  border-color: #2d5a3d !important;
+  color: white !important;
 }
 
 .edit-btn:hover svg {

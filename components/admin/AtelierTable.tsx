@@ -23,43 +23,38 @@ export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: A
   if (ateliers.length === 0) {
     return (
       <div className="text-center py-16">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-full mb-4">
-          <span className="text-4xl">📚</span>
-        </div>
-        <p className="text-gray-600 text-lg font-medium mb-2">
+        <Calendar size={48} className="mx-auto mb-4" style={{ color: '#2d5a3d', opacity: 0.3 }} />
+        <p className="text-lg font-medium mb-2" style={{ color: '#2c2c2c', fontFamily: 'var(--font-playfair), serif' }}>
           Aucun atelier pour le moment
         </p>
-        <p className="text-gray-400 text-sm">
-          Créez votre premier atelier pour commencer !
+        <p className="text-sm" style={{ color: '#6b7280' }}>
+          Créez votre premier atelier pour commencer
         </p>
       </div>
     )
   }
 
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden">
+    <div className="border-2 rounded-lg overflow-hidden" style={{ borderColor: '#e8e4df' }}>
       <Table>
         <TableHeader>
-          <TableRow className="bg-gradient-to-r from-gray-50 to-white hover:from-gray-50 hover:to-white">
-            <TableHead className="font-bold text-gray-700">Titre</TableHead>
-            <TableHead className="font-bold text-gray-700">Slug</TableHead>
-            <TableHead className="font-bold text-gray-700">Prix</TableHead>
-            <TableHead className="font-bold text-gray-700">Description</TableHead>
-            <TableHead className="text-right font-bold text-gray-700">Actions</TableHead>
+          <TableRow style={{ background: '#fafaf8' }}>
+            <TableHead className="font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Titre</TableHead>
+            <TableHead className="font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Slug</TableHead>
+            <TableHead className="font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Prix</TableHead>
+            <TableHead className="font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Description</TableHead>
+            <TableHead className="text-right font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {ateliers.map((atelier, index) => (
-            <TableRow 
+          {ateliers.map((atelier) => (
+            <TableRow
               key={atelier.id}
-              className="table-row-hover border-b border-gray-100 last:border-0"
-              style={{ animationDelay: `${index * 0.05}s` }}
+              className="table-row-hover"
+              style={{ borderBottom: '1px solid #e8e4df' }}
             >
-              <TableCell className="font-semibold text-gray-900">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500"></div>
-                  {atelier.titre}
-                </div>
+              <TableCell className="font-semibold" style={{ color: '#2c2c2c' }}>
+                {atelier.titre}
               </TableCell>
               <TableCell>
                 <span className="badge-slug">
@@ -72,7 +67,7 @@ export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: A
                 </span>
               </TableCell>
               <TableCell className="max-w-xs">
-                <p className="truncate text-gray-600 text-sm">
+                <p className="truncate text-sm" style={{ color: '#6b7280' }}>
                   {atelier.description_courte}
                 </p>
               </TableCell>
@@ -83,7 +78,8 @@ export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: A
                       variant="outline"
                       size="sm"
                       onClick={() => onManageSessions(atelier)}
-                      className="action-button bg-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 border-gray-300"
+                      className="action-button border-2 hover:bg-[#2d5a3d] hover:text-white hover:border-[#2d5a3d]"
+                      style={{ borderColor: '#d1d5db', background: 'white' }}
                       title="Gérer les sessions"
                     >
                       <Calendar className="h-4 w-4" />
@@ -93,7 +89,8 @@ export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: A
                     variant="outline"
                     size="sm"
                     onClick={() => onEdit(atelier)}
-                    className="edit-btn action-button bg-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500 border-gray-300"
+                    className="edit-btn action-button border-2"
+                    style={{ borderColor: '#d1d5db', background: 'white' }}
                     title="Modifier"
                   >
                     <Pencil className="h-4 w-4" />
@@ -102,7 +99,8 @@ export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: A
                     variant="outline"
                     size="sm"
                     onClick={() => onDelete(atelier)}
-                    className="delete-btn action-button bg-white hover:bg-gradient-to-r hover:from-red-500 hover:to-pink-500 border-gray-300"
+                    className="delete-btn action-button border-2"
+                    style={{ borderColor: '#d1d5db', background: 'white' }}
                     title="Supprimer"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -116,4 +114,3 @@ export function AtelierTable({ ateliers, onEdit, onDelete, onManageSessions }: A
     </div>
   )
 }
-

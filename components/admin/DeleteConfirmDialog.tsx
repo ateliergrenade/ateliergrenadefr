@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { AlertTriangle } from 'lucide-react'
 
 interface DeleteConfirmDialogProps {
   open: boolean
@@ -27,25 +28,25 @@ export function DeleteConfirmDialog({
 }: DeleteConfirmDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border-0 shadow-2xl bg-white">
+      <DialogContent className="border-2" style={{ background: '#f8f5f2', borderColor: '#e8e4df' }}>
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 bg-gradient-to-br from-red-100 to-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">⚠️</span>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'rgba(200, 16, 46, 0.08)' }}>
+              <AlertTriangle className="h-5 w-5" style={{ color: '#c8102e' }} />
             </div>
-            <DialogTitle className="text-xl font-bold text-gray-900">
+            <DialogTitle className="text-xl font-bold" style={{ color: '#2c2c2c', fontFamily: 'var(--font-playfair), serif' }}>
               Confirmer la suppression
             </DialogTitle>
           </div>
-          <DialogDescription className="text-base text-gray-600 pt-2">
+          <DialogDescription className="text-base pt-2" style={{ color: '#6b7280', fontFamily: 'var(--font-crimson), serif' }}>
             Êtes-vous sûr de vouloir supprimer l'atelier{' '}
-            <span className="font-semibold text-gray-900 bg-gray-100 px-2 py-1 rounded">
-              "{atelierTitle}"
+            <span className="font-semibold px-2 py-0.5 rounded" style={{ color: '#2c2c2c', background: 'white' }}>
+              « {atelierTitle} »
             </span>{' '}
             ?
             <br />
-            <span className="inline-flex items-center gap-1 mt-2 text-red-600 font-medium">
-              <span>🚫</span> Cette action est irréversible.
+            <span className="inline-block mt-2 font-medium" style={{ color: '#c8102e' }}>
+              Cette action est irréversible.
             </span>
           </DialogDescription>
         </DialogHeader>
@@ -54,28 +55,21 @@ export function DeleteConfirmDialog({
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={loading}
-            className="transition-all hover:bg-gray-100"
+            className="border-2 transition-all"
+            style={{ borderColor: '#d1d5db' }}
           >
             Annuler
           </Button>
           <Button
             onClick={onConfirm}
             disabled={loading}
-            className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            className="text-white border-0 transition-all"
+            style={{ background: '#c8102e' }}
           >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <span className="animate-spin">⏳</span> Suppression...
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <span>🗑️</span> Supprimer
-              </span>
-            )}
+            {loading ? 'Suppression...' : 'Supprimer'}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   )
 }
-

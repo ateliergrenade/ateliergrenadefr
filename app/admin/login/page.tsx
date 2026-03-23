@@ -39,18 +39,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white text-gray-900 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">Administration</CardTitle>
-          <CardDescription>
-            Connectez-vous pour gérer les ateliers
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#f8f5f2' }}>
+      <Card className="w-full max-w-md border-2" style={{ borderColor: '#e8e4df', background: 'white' }}>
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>
+            Atelier Grenade
+          </CardTitle>
+          <CardDescription className="text-base" style={{ color: '#6b7280', fontFamily: 'var(--font-crimson), serif' }}>
+            Espace administration
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password" className="text-sm font-semibold" style={{ color: '#2c2c2c' }}>
+                Mot de passe
+              </Label>
               <Input
                 id="password"
                 type="password"
@@ -59,16 +63,32 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoFocus
+                className="h-12 border-2 transition-all"
+                style={{
+                  borderColor: '#d1d5db',
+                  background: 'white',
+                  color: '#1f2937',
+                  borderRadius: '0.5rem',
+                }}
               />
             </div>
 
             {error && (
-              <div className="text-sm text-orange-600 bg-orange-50 p-3 rounded-md">
+              <div className="text-sm p-3 rounded-lg" style={{ color: '#c8102e', background: 'rgba(200, 16, 46, 0.06)', border: '1px solid rgba(200, 16, 46, 0.2)' }}>
                 {error}
               </div>
             )}
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-semibold transition-all"
+              disabled={loading}
+              style={{
+                background: '#2d5a3d',
+                color: 'white',
+                borderRadius: '0.5rem',
+              }}
+            >
               {loading ? 'Connexion...' : 'Se connecter'}
             </Button>
           </form>
@@ -77,4 +97,3 @@ export default function LoginPage() {
     </div>
   )
 }
-

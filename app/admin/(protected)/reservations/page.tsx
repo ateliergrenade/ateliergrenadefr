@@ -64,7 +64,7 @@ export default function ReservationsAdminPage() {
     switch (statut) {
       case 'confirmee':
         return (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'rgba(45, 90, 61, 0.1)', color: '#2d5a3d' }}>
             <CheckCircle2 className="h-3 w-3 mr-1" />
             Confirmée
           </span>
@@ -78,7 +78,7 @@ export default function ReservationsAdminPage() {
         )
       case 'annulee':
         return (
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'rgba(200, 16, 46, 0.08)', color: '#c8102e' }}>
             <XCircle className="h-3 w-3 mr-1" />
             Annulée
           </span>
@@ -89,16 +89,16 @@ export default function ReservationsAdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 text-gray-900 p-4 md:p-8">
+    <div className="min-h-screen p-4 md:p-8" style={{ background: '#f8f5f2', color: '#1f2937' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="admin-header mb-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                🎫 Réservations
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-playfair), serif' }}>
+                Réservations
               </h1>
-              <p className="text-white/90 text-sm md:text-base">
+              <p className="text-white/80 text-sm md:text-base" style={{ fontFamily: 'var(--font-crimson), serif' }}>
                 Consultez toutes les réservations
               </p>
             </div>
@@ -124,73 +124,68 @@ export default function ReservationsAdminPage() {
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 text-orange-700 rounded-xl shadow-lg">
+          <div className="mb-6 p-4 rounded-lg border-2" style={{ background: 'rgba(200, 16, 46, 0.04)', borderColor: 'rgba(200, 16, 46, 0.2)', color: '#c8102e' }}>
             <p className="font-medium">{error}</p>
           </div>
         )}
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-6">
-              <p className="text-sm text-gray-600 mb-1">Total</p>
-              <p className="text-3xl font-bold text-purple-600">{stats.total}</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <Card className="border-2 shadow-none" style={{ borderColor: '#e8e4df', background: 'white' }}>
+            <CardContent className="p-5">
+              <p className="text-sm mb-1" style={{ color: '#6b7280', fontFamily: 'var(--font-crimson), serif' }}>Total</p>
+              <p className="text-3xl font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>{stats.total}</p>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-6">
-              <p className="text-sm text-gray-600 mb-1">Confirmées</p>
-              <p className="text-3xl font-bold text-green-600">{stats.confirmee}</p>
+          <Card className="border-2 shadow-none" style={{ borderColor: '#e8e4df', background: 'white' }}>
+            <CardContent className="p-5">
+              <p className="text-sm mb-1" style={{ color: '#6b7280', fontFamily: 'var(--font-crimson), serif' }}>Confirmées</p>
+              <p className="text-3xl font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>{stats.confirmee}</p>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-6">
-              <p className="text-sm text-gray-600 mb-1">En attente</p>
-              <p className="text-3xl font-bold text-yellow-600">{stats.en_attente}</p>
+          <Card className="border-2 shadow-none" style={{ borderColor: '#e8e4df', background: 'white' }}>
+            <CardContent className="p-5">
+              <p className="text-sm mb-1" style={{ color: '#6b7280', fontFamily: 'var(--font-crimson), serif' }}>En attente</p>
+              <p className="text-3xl font-bold" style={{ color: '#d4a017', fontFamily: 'var(--font-playfair), serif' }}>{stats.en_attente}</p>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-6">
-              <p className="text-sm text-gray-600 mb-1">Annulées</p>
-              <p className="text-3xl font-bold text-red-600">{stats.annulee}</p>
+          <Card className="border-2 shadow-none" style={{ borderColor: '#e8e4df', background: 'white' }}>
+            <CardContent className="p-5">
+              <p className="text-sm mb-1" style={{ color: '#6b7280', fontFamily: 'var(--font-crimson), serif' }}>Annulées</p>
+              <p className="text-3xl font-bold" style={{ color: '#c8102e', fontFamily: 'var(--font-playfair), serif' }}>{stats.annulee}</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Card */}
         <Card className="admin-card border-0">
-          <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 pb-6">
+          <CardHeader className="border-b pb-6" style={{ borderColor: '#e8e4df', background: 'white' }}>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                <CardTitle className="text-2xl font-bold" style={{ color: '#2d5a3d', fontFamily: 'var(--font-playfair), serif' }}>
                   Liste des réservations
                 </CardTitle>
-                <CardDescription className="text-base mt-2">
+                <CardDescription className="text-base mt-2" style={{ fontFamily: 'var(--font-crimson), serif' }}>
                   {filteredReservations.length} réservation{filteredReservations.length > 1 ? 's' : ''}
                 </CardDescription>
               </div>
               <div className="flex gap-2">
-                <Button
-                  variant={filter === 'all' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFilter('all')}
-                >
-                  Toutes
-                </Button>
-                <Button
-                  variant={filter === 'confirmee' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFilter('confirmee')}
-                >
-                  Confirmées
-                </Button>
-                <Button
-                  variant={filter === 'en_attente' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFilter('en_attente')}
-                >
-                  En attente
-                </Button>
+                {(['all', 'confirmee', 'en_attente'] as const).map((f) => (
+                  <Button
+                    key={f}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setFilter(f)}
+                    className="border-2 transition-all"
+                    style={{
+                      background: filter === f ? '#2d5a3d' : 'white',
+                      color: filter === f ? 'white' : '#2c2c2c',
+                      borderColor: filter === f ? '#2d5a3d' : '#d1d5db',
+                    }}
+                  >
+                    {f === 'all' ? 'Toutes' : f === 'confirmee' ? 'Confirmées' : 'En attente'}
+                  </Button>
+                ))}
               </div>
             </div>
           </CardHeader>
@@ -202,12 +197,12 @@ export default function ReservationsAdminPage() {
               </div>
             ) : filteredReservations.length === 0 ? (
               <div className="text-center py-12">
-                <Calendar size={64} className="mx-auto mb-4 text-gray-400" />
-                <p className="text-xl text-gray-600 mb-2">Aucune réservation</p>
-                <p className="text-gray-400">Les réservations apparaîtront ici</p>
+                <Calendar size={48} className="mx-auto mb-4" style={{ color: '#2d5a3d', opacity: 0.3 }} />
+                <p className="text-lg mb-2" style={{ color: '#2c2c2c', fontFamily: 'var(--font-playfair), serif' }}>Aucune réservation</p>
+                <p className="text-sm" style={{ color: '#6b7280' }}>Les réservations apparaîtront ici</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {filteredReservations.map((reservation) => {
                   const sessionData = Array.isArray(reservation.session)
                     ? reservation.session[0]
@@ -223,19 +218,23 @@ export default function ReservationsAdminPage() {
                       : null
 
                   return (
-                    <div key={reservation.id} className="p-4 rounded-lg border-2 bg-white">
+                    <div
+                      key={reservation.id}
+                      className="p-5 rounded-lg border-2 transition-all"
+                      style={{ background: 'white', borderColor: '#e8e4df' }}
+                    >
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-3">
-                            <h3 className="text-lg font-bold text-gray-900">
+                            <h3 className="text-lg font-bold" style={{ color: '#2c2c2c', fontFamily: 'var(--font-playfair), serif' }}>
                               {atelierData?.titre || 'Atelier inconnu'}
                             </h3>
                             {getStatusBadge(reservation.statut)}
                           </div>
-                          <div className="space-y-2 text-sm text-gray-600">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          <div className="space-y-2 text-sm" style={{ color: '#6b7280', fontFamily: 'var(--font-crimson), serif' }}>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                               <div>
-                                <p className="font-semibold">Client</p>
+                                <p className="font-semibold" style={{ color: '#2c2c2c' }}>Client</p>
                                 <p>
                                   {clientData?.prenom} {clientData?.nom}
                                 </p>
@@ -243,11 +242,10 @@ export default function ReservationsAdminPage() {
                                 <p>{clientData?.telephone}</p>
                               </div>
                               <div>
-                                <p className="font-semibold">Session</p>
+                                <p className="font-semibold" style={{ color: '#2c2c2c' }}>Session</p>
                                 {sessionData && (
                                   <>
                                     <p>
-                                      📅{' '}
                                       {new Date(sessionData.date_debut).toLocaleDateString('fr-FR', {
                                         weekday: 'long',
                                         year: 'numeric',
@@ -256,7 +254,6 @@ export default function ReservationsAdminPage() {
                                       })}
                                     </p>
                                     <p>
-                                      🕐{' '}
                                       {new Date(sessionData.date_debut).toLocaleTimeString('fr-FR', {
                                         hour: '2-digit',
                                         minute: '2-digit',
@@ -267,11 +264,11 @@ export default function ReservationsAdminPage() {
                               </div>
                             </div>
                             {reservation.montant_paye && (
-                              <p className="font-semibold text-green-600">
-                                Montant payé: {reservation.montant_paye} €
+                              <p className="font-semibold" style={{ color: '#2d5a3d' }}>
+                                Montant payé : {reservation.montant_paye} €
                               </p>
                             )}
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs" style={{ color: '#9ca3af' }}>
                               Créée le {new Date(reservation.created_at!).toLocaleString('fr-FR')}
                             </p>
                           </div>
@@ -288,6 +285,3 @@ export default function ReservationsAdminPage() {
     </div>
   )
 }
-
-
-
